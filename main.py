@@ -25,28 +25,29 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 def getCreds():
-  # The file token.pickle stores the user's access and refresh tokens, and is
-  # created automatically when the authorization flow completes for the first
-  # time.
-  creds = None
-  SCOPES = 'https://www.googleapis.com/auth/drive'
+    creds = None
+    SCOPES = 'https://www.googleapis.com/auth/drive'
 
-  if os.path.exists('token.pickle'):
-      with open('token.pickle', 'rb') as token:
-          creds = pickle.load(token)
-  # If there are no (valid) credentials available, let the user log in.
-  if not creds or not creds.valid:
-      if creds and creds.expired and creds.refresh_token:
-          creds.refresh(Request())
-      else:
-          flow = InstalledAppFlow.from_client_secrets_file(
-              'credentials.json', SCOPES)
-          creds = flow.run_local_server(port=0)
-      # Save the credentials for the next run
-      with open('token.pickle', 'wb') as token:
-          pickle.dump(creds, token)
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+            if (
+                (creds is None or not creds.valid)
+                and creds
+                and creds.expired
+                and creds.refresh_token
+            ):
+                creds.refresh(Request())
 
-  return creds
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                'credentials.json', SCOPES)
+            creds = flow.run_local_server(port=0, open_browser=False)
+        # Save the credentials for the next run
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+
+    return creds
 
 def start(update: Update, context: CallbackContext) -> None:
     """Inform user about what this bot can do"""
@@ -61,16 +62,9 @@ Please select:
     )
 
 def getmetutorial(update, context):
-    # update.message.reply_text('The file is downloading')
-    # context.bot.sendDocument(update.effective_chat.id, document=open('python-basics-sample-chapters.pdf', 'rb'))
     context.bot.sendDocument(update.effective_chat.id, "https://drive.google.com/uc?id=11tG8lN-l6aZlkJ16wDCMLAgeSYBeItjg&export=download") 
 
-# def silentremove(filename):
-#     try:
-        
-    # except OSError:
-    #     pass
-YEAR, DEPARTMENT, SEMESTER, SUBJECT = range(4)
+DEPARTMENT, SEMESTER, SUBJECT, WAIT_STATE, SETFID = range(5)
 file_ids
 
 def error(bot, update, error):
@@ -109,36 +103,28 @@ def select_semester(update, context) -> int:
     
     return SUBJECT
 
-
 def select_subject(update, context) -> int:
     query = update.callback_query
     query.answer()
     year, department, semester = update.callback_query.data.split("|") 
-    print(year)
-    print(department)
-    print(semester)
     buttons = []
     for subject in file_ids[year][department][semester].keys():
         buttons.append([InlineKeyboardButton(subject, callback_data=file_ids[year][department][semester][subject])])
 
     reply_markup = InlineKeyboardMarkup(buttons)
     query.edit_message_text(text="Choose a Subject:", reply_markup=reply_markup)
-    update.message.reply_text('upload file here')
-    return ConversationHandler.END
+    return SETFID
 
-conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('submissions', select_year)],
-        states={
-            DEPARTMENT: [CallbackQueryHandler(select_department)],
-            SEMESTER: [CallbackQueryHandler(select_semester)],
-            SUBJECT: [CallbackQueryHandler(select_subject)]
-        },
-        fallbacks=[CommandHandler('submissions', select_year)],
-    )
+def subject_was_selected(update, context):
+    #save file_id in the context
+    query = update.callback_query
+    query.answer()
+    context.user_data["file_ids"] = update.callback_query.data
+    query.edit_message_text("Now send your file", reply_markup=None)
+    return WAIT_STATE
 
 def file_uploader(update, context):
   """handles the uploaded files"""
-
   file = context.bot.getFile(update.message.document.file_id)
   file.download(update.message.document.file_name)
 
@@ -148,8 +134,9 @@ def file_uploader(update, context):
   filename = doc.file_name
   
   metadata = {'name': filename,
-              'parents': [folder_id]
+              'parents': [context.user_data["file_ids"]]
   }
+  print(context.user_data["file_ids"])
   media = MediaFileUpload(filename, chunksize=1024 * 1024, mimetype=doc.mime_type,  resumable=True)
   request = service.files().create(body=metadata,
                                 media_body=media)
@@ -162,8 +149,19 @@ def file_uploader(update, context):
 
   context.bot.send_message(chat_id=update.effective_chat.id, text="✅ File uploaded!")
   os.remove(filename)
+  return ConversationHandler.END
 
-
+conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('submissions', select_year)],
+        states={
+            DEPARTMENT: [CallbackQueryHandler(select_department)],
+            SEMESTER: [CallbackQueryHandler(select_semester)],
+            SUBJECT: [CallbackQueryHandler(select_subject)],
+            SETFID: [CallbackQueryHandler(subject_was_selected)],
+            WAIT_STATE: [MessageHandler(Filters.document,file_uploader)]
+        },
+        fallbacks=[CommandHandler('submissions', select_year)],
+    )
 
 def poc_handler(update, context) -> None:
     """Display a help message"""
@@ -173,11 +171,9 @@ def main():
   updater = Updater(token=config.TOKEN,use_context=True)
   dispatcher = updater.dispatcher
   updater.dispatcher.add_handler(CommandHandler('start', start))
-  dispatcher.add_handler(MessageHandler(Filters.document,file_uploader))
   dispatcher.add_handler(conv_handler)
   dispatcher.add_handler(CommandHandler('getmetutorial', getmetutorial))
-#   dispatcher.add_handler(CallbackQueryHandler())
-#   dispatcher.add_handler(CallbackQueryHandler(CNS, pattern='^' + str(CNS) + '$'))
+
   updater.start_polling()
 
 if __name__ == '__main__':

@@ -3,8 +3,8 @@ file_ids = {
         "IT":{
             "Semester I": {
                 "Physics I": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
-                "Chemistry I": "",
-                "Maths I": "",
+                "Chemistry I": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
+                "Maths I": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
             },
             "Semester II": {
                 "Physics II": "",
