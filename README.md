@@ -1,1 +1,1 @@
-# VOST - Learning management System but now on Telegram !
+# VOST - Learning management System but now on Telegram!
