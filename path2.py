@@ -1,10 +1,9 @@
-file_ids = {
+doc_ids = {
   "First year": {
         "IT":{
             "Semester I": {
-                "Physics I": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
-                "Chemistry I": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
-                "Maths I": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
+                "Syllabus": "https://bit.ly/3KOTIxL",
+                "Timetable": "https://bit.ly/3KOTIxL",
             },
             "Semester II": {
                 "Physics II": "",

@@ -8,7 +8,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import telegram
 import logging
+import pyfiglet
 import config
+import requests
 from bot_responses import * 
 from telegram.ext import (
     Updater,
@@ -19,50 +21,60 @@ from telegram.ext import (
     MessageHandler, Filters
 )
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+
 folder_id = '1DFStWQd-Y6H0WoWr1E1ByNuElANMzCft'
+PORT = int(os.environ.get('PORT', '8443'))
+
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def getCreds():
-    creds = None
-    SCOPES = 'https://www.googleapis.com/auth/drive'
+  # The file token.pickle stores the user's access and refresh tokens, and is
+  # created automatically when the authorization flow completes for the first
+  # time.
+  creds = None
+  SCOPES = 'https://www.googleapis.com/auth/drive'
 
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-            if (
-                (creds is None or not creds.valid)
-                and creds
-                and creds.expired
-                and creds.refresh_token
-            ):
-                creds.refresh(Request())
+  if os.path.exists('token.pickle'):
+      with open('token.pickle', 'rb') as token:
+          creds = pickle.load(token)
+  # If there are no (valid) credentials available, let the user log in.
+  if not creds or not creds.valid:
+      if creds and creds.expired and creds.refresh_token:
+          creds.refresh(Request())
+      else:
+          flow = InstalledAppFlow.from_client_secrets_file(
+              'credentials.json', SCOPES)
+          creds = flow.run_local_server(port=0)
+      # Save the credentials for the next run
+      with open('token.pickle', 'wb') as token:
+          pickle.dump(creds, token)
 
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0, open_browser=False)
-        # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-
-    return creds
+  return creds
 
 def start(update: Update, context: CallbackContext) -> None:
     """Inform user about what this bot can do"""
-    update.message.reply_text(
-        '''Hello this is VOST, how may I help you today?
-        
-Please select:
-/poc to get info on Point of contact for IT dept
-/submissions to submit your journals and assignments
-/getmetutorial to get the sample tutorial
-'''
-    )
+    update.message.reply_text('''Welcome to VOST! 
+This bot helps in users to submit their assignments and also know more about DBIT.
 
-def getmetutorial(update, context):
-    context.bot.sendDocument(update.effective_chat.id, "https://drive.google.com/uc?id=11tG8lN-l6aZlkJ16wDCMLAgeSYBeItjg&export=download") 
+Click /help to know more about the bot.
+/submission - Use this command to submit your files and documents. 
+/Academic_documents - Use this command to view and download the annual documents like exam seat number, hall ticket, time table and academic calendar.
+/College_information - Use this command to know more about DBIT i.e. student clubs, student chapters, cultural fest, technical fest. 
+/poc - Use this command to get point of contact i.e information about professors in DBIT branch wise. 
+
+'''
+)
+
+def collegeBrochure(update, context):
+    # # fetch from Google Drive
+    # url = 'https://drive.google.com/file/d/1ktIb4priH8P1iGIghj7CD6UJV5X8Gsm5/view'
+    # r = requests.get(url, allow_redirects=True)
+    # # save local copy
+    # open('brochure.pdf', 'wb').write(r.content)# send file to user
+    context.bot.sendDocument(update.effective_chat.id, document=open('pdfFiles/brochure.pdf', 'rb'), filename="brochure.pdf")
+    # os.remove('brochure.pdf')
 
 DEPARTMENT, SEMESTER, SUBJECT, WAIT_STATE, SETFID = range(5)
 file_ids
@@ -152,7 +164,7 @@ def file_uploader(update, context):
   return ConversationHandler.END
 
 conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('submissions', select_year)],
+        entry_points=[CommandHandler('submission', select_year)],
         states={
             DEPARTMENT: [CallbackQueryHandler(select_department)],
             SEMESTER: [CallbackQueryHandler(select_semester)],
@@ -167,14 +179,76 @@ def poc_handler(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(poc_reponse)
 
+def getAcademicFiles(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(academic_docs_response)
+
+def getCollegeInfo(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(CollegeInfoResponse)
+
+def studentClubs(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(studentClubsResponse)
+
+def studentChapters(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(studentChaptersResponse)
+
+def technicalEvents(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(technicalEventsResponse)
+
+def csi(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(csiResponse)
+
+def ieee(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(ieeeResponse)
+
+def iete(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(ieteResponse)
+
+def madgears(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(madgearsResponse)
+
+def ishrae(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(ishraeResponse)
+
+def acm(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(acmResponse)
+
+
 def main():
   updater = Updater(token=config.TOKEN,use_context=True)
   dispatcher = updater.dispatcher
   updater.dispatcher.add_handler(CommandHandler('start', start))
   dispatcher.add_handler(conv_handler)
-  dispatcher.add_handler(CommandHandler('getmetutorial', getmetutorial))
+  dispatcher.add_handler(CommandHandler('getmeBrochure', collegeBrochure))
+  updater.dispatcher.add_handler(CommandHandler('poc', poc_handler))
+  updater.dispatcher.add_handler(CommandHandler('College_information', getCollegeInfo))
+  updater.dispatcher.add_handler(CommandHandler('Student_chapters', studentChapters))
+  updater.dispatcher.add_handler(CommandHandler('csi', csi))
+  updater.dispatcher.add_handler(CommandHandler('ieee', ieee))
+  updater.dispatcher.add_handler(CommandHandler('iete', iete))
+  updater.dispatcher.add_handler(CommandHandler('madgears', madgears))
+  updater.dispatcher.add_handler(CommandHandler('ishrae', ishrae))
+  updater.dispatcher.add_handler(CommandHandler('acm', acm))
+  updater.dispatcher.add_handler(CommandHandler('academic_documents', getAcademicFiles))
 
+  # updater.start_webhook(listen="0.0.0.0",
+  #                     port=int(PORT),
+  #                     url_path=config.TOKEN,
+  #                     webhook_url = "https://vost-bot-tg.herokuapp.com/" + config.TOKEN)
+                      
   updater.start_polling()
 
 if __name__ == '__main__':
+    ascii_banner = pyfiglet.figlet_format("VOST   TELEGRAM   BOT")
+    print(ascii_banner)
     main()
