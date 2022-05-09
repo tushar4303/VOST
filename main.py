@@ -1,6 +1,7 @@
 from __future__ import print_function
 import os
 from path import file_ids
+from path2 import doc_ids
 import pickle
 from googleapiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
@@ -22,9 +23,7 @@ from telegram.ext import (
 )
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 
-folder_id = '1DFStWQd-Y6H0WoWr1E1ByNuElANMzCft'
 PORT = int(os.environ.get('PORT', '8443'))
-
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -53,6 +52,10 @@ def getCreds():
 
   return creds
 
+DEPARTMENT, SEMESTER, SUBJECT, WAIT_STATE, SETFID, YEAR, CHOOSE_FILE, SETDID, SENDFILE = range(9)
+file_ids
+doc_ids
+
 def start(update: Update, context: CallbackContext) -> None:
     """Inform user about what this bot can do"""
     update.message.reply_text('''Welcome to VOST! 
@@ -76,13 +79,22 @@ def collegeBrochure(update, context):
     context.bot.sendDocument(update.effective_chat.id, document=open('pdfFiles/brochure.pdf', 'rb'), filename="brochure.pdf")
     # os.remove('brochure.pdf')
 
-DEPARTMENT, SEMESTER, SUBJECT, WAIT_STATE, SETFID = range(5)
-file_ids
-
 def error(bot, update, error):
   logger.warning('Update "%s" caused error "%s"', update, error)
     
 def select_year(update, context) -> int:
+    buttons = []
+    for year in file_ids.keys():
+        buttons.append([InlineKeyboardButton(year, callback_data=year)])
+
+    reply_markup = InlineKeyboardMarkup(buttons)  
+    update.message.reply_text("Select the year in which you are studying:", reply_markup=reply_markup)
+    return DEPARTMENT
+
+def select_yearinfo(update, context) -> int:
+    query = update.callback_query
+    query.answer()
+    choice = query.data
     buttons = []
     for year in file_ids.keys():
         buttons.append([InlineKeyboardButton(year, callback_data=year)])
@@ -115,6 +127,29 @@ def select_semester(update, context) -> int:
     
     return SUBJECT
 
+def select_semesterinfo(update, context) -> int:
+    query = update.callback_query
+    query.answer()
+    year, department = update.callback_query.data.split("|")
+    buttons = []
+    for semester in doc_ids[year][department].keys():
+        buttons.append([InlineKeyboardButton(semester, callback_data=update.callback_query.data+f"|{semester}")])
+    reply_markup = InlineKeyboardMarkup(buttons)
+    query.edit_message_text(text="Choose your Semester:", reply_markup=reply_markup)
+    
+    return CHOOSE_FILE
+
+def selectFile(update, context) -> int:
+    query = update.callback_query
+    query.answer()
+    year, department, semester = update.callback_query.data.split("|")
+    buttons = []
+    for file in doc_ids[year][department].keys():
+        buttons.append([InlineKeyboardButton(file, callback_data=file_ids[year][department][semester][file])])
+    reply_markup = InlineKeyboardMarkup(buttons)
+    query.edit_message_text(text="Choose a file:", reply_markup=reply_markup)
+    return SETDID
+
 def select_subject(update, context) -> int:
     query = update.callback_query
     query.answer()
@@ -126,6 +161,14 @@ def select_subject(update, context) -> int:
     reply_markup = InlineKeyboardMarkup(buttons)
     query.edit_message_text(text="Choose a Subject:", reply_markup=reply_markup)
     return SETFID
+
+def file_was_selected(update, context):
+    #save file_id in the context
+    query = update.callback_query
+    query.answer()
+    context.user_data["doc_ids"] = update.callback_query.data
+    query.edit_message_text("Your file is on the way", reply_markup=None)
+    return SENDFILE
 
 def subject_was_selected(update, context):
     #save file_id in the context
@@ -174,14 +217,25 @@ conv_handler = ConversationHandler(
         },
         fallbacks=[CommandHandler('submissions', select_year)],
     )
+fileRequest_handler = ConversationHandler(
+        entry_points=[CommandHandler('academic_documents', getAcademicFiles)],
+        states={
+            DEPARTMENT: [CallbackQueryHandler(select_department)],
+            SEMESTER: [CallbackQueryHandler(select_semester)],
+            SUBJECT: [CallbackQueryHandler(select_subject)],
+            SETFID: [CallbackQueryHandler(subject_was_selected)],
+            WAIT_STATE: [MessageHandler(Filters.document,file_uploader)]
+        },
+        fallbacks=[CommandHandler('submissions', select_year)],
+    )
 
 def poc_handler(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(poc_reponse)
 
 def getAcademicFiles(update, context) -> None:
-    """Display a help message"""
-    update.message.reply_text(academic_docs_response)
+    update.message.reply_text("Select your year, branch and semester to get the files accordingly", reply_markup=reply_markup)
+    return YEAR
 
 def getCollegeInfo(update, context) -> None:
     """Display a help message"""
@@ -229,6 +283,7 @@ def main():
   dispatcher = updater.dispatcher
   updater.dispatcher.add_handler(CommandHandler('start', start))
   dispatcher.add_handler(conv_handler)
+  dispatcher.add_handler(fileRequest_handler)
   dispatcher.add_handler(CommandHandler('getmeBrochure', collegeBrochure))
   updater.dispatcher.add_handler(CommandHandler('poc', poc_handler))
   updater.dispatcher.add_handler(CommandHandler('College_information', getCollegeInfo))
