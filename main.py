@@ -22,15 +22,15 @@ from telegram.ext import (
     CallbackContext,
     MessageHandler, Filters
 )
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import ChatAction, InlineKeyboardButton, InlineKeyboardMarkup, Update
 
 PORT = int(os.environ.get('PORT', '8443'))
 
 logging.basicConfig(filename='bot_usage.log', encoding='utf-8', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-ALLOWED_USERS = ['tushar_493']
-STUDENTS = ['tushar_493']
+ALLOWED_USERS = ['tushar_493', 'saanvi_naik']
+STUDENTS = ['tushar_493', 'saanvi_naik']
 
 def restricted(func):
     @wraps(func)
@@ -41,6 +41,24 @@ def restricted(func):
             return
         return func(update, context, *args, **kwargs)
     return wrapped
+
+from functools import wraps
+
+def send_action(action):
+    """Sends `action` while processing func command."""
+
+    def decorator(func):
+        @wraps(func)
+        def command_func(update, context, *args, **kwargs):
+            context.bot.send_chat_action(chat_id=update.effective_message.chat_id, action=action)
+            return func(update, context,  *args, **kwargs)
+        return command_func
+    
+    return decorator
+
+
+send_typing_action = send_action(ChatAction.TYPING)
+send_upload_file_action = send_action(ChatAction.UPLOAD_DOCUMENT)
 
 def getCreds():
   # The file token.pickle stores the user's access and refresh tokens, and is
@@ -84,14 +102,11 @@ Click /help to know more about the bot.
 '''
 )
 
+@send_upload_file_action
 def collegeBrochure(update, context):
-    # # fetch from Google Drive
-    # url = 'https://drive.google.com/file/d/1ktIb4priH8P1iGIghj7CD6UJV5X8Gsm5/view'
-    # r = requests.get(url, allow_redirects=True)
-    # # save local copy
-    # open('brochure.pdf', 'wb').write(r.content)# send file to user
+    
     context.bot.sendDocument(update.effective_chat.id, document=open('pdfFiles/brochure.pdf', 'rb'), filename="brochure.pdf")
-    # os.remove('brochure.pdf')
+    os.remove('brochure.pdf')
 
 def error(bot, update, error):
   logger.warning('Update "%s" caused error "%s"', update, error)
@@ -156,8 +171,8 @@ def selectFile(update, context) -> int:
     query.answer()
     year, department, semester = update.callback_query.data.split("|")
     buttons = []
-    for file in doc_ids[year][department].keys():
-        buttons.append([InlineKeyboardButton(file, callback_data=file_ids[year][department][semester][file])])
+    for file in doc_ids[year][department][semester].keys():
+        buttons.append([InlineKeyboardButton(file, callback_data=doc_ids[year][department][semester][file])])
     reply_markup = InlineKeyboardMarkup(buttons)
     query.edit_message_text(text="Choose a file:", reply_markup=reply_markup)
     return SETDID
@@ -178,19 +193,20 @@ def file_was_selected(update, context):
     #save file_id in the context
     query = update.callback_query
     query.answer()
-    context.user_data["doc_ids"] = update.callback_query.data
+    context.user_data["doc_ids"] = str(update.callback_query.data)
+    
     query.edit_message_text("Your file is on the way", reply_markup=None)
-    return SENDFILE
+    # context.bot.sendDocument(update.effective_chat.id, document=open("{context.user_data["doc_ids"]}"))
+    print
+    # return SENDFILE
 
 def file_sender(update, context):
-    path = context.user_data["doc_ids"]
-    context.bot.sendDocument(update.effective_chat.id, document=open(path, 'rb'))
-
-
+    print(str(context.user_data["doc_ids"]))
+    # context.bot.sendDocument(update.effective_chat.id, document=open([context.user_data["doc_ids"]], 'rb'))
 
 def getAcademicFiles(update, context) -> None:
     update.message.reply_text('''Select your year, branch and semester to get the files accordingly
-    tap /userinfo to start''')
+tap /userinfo to start''')
     return YEAR
     
 def subject_was_selected(update, context):
@@ -201,6 +217,7 @@ def subject_was_selected(update, context):
     query.edit_message_text("Now send your file", reply_markup=None)
     return WAIT_STATE
 
+send_typing_action
 def file_uploader(update, context):
   """handles the uploaded files"""
   file = context.bot.getFile(update.message.document.file_id)
@@ -214,7 +231,6 @@ def file_uploader(update, context):
   metadata = {'name': filename,
               'parents': [context.user_data["file_ids"]]
   }
-  print(context.user_data["file_ids"])
   media = MediaFileUpload(filename, chunksize=1024 * 1024, mimetype=doc.mime_type,  resumable=True)
   request = service.files().create(body=metadata,
                                 media_body=media)
@@ -242,15 +258,16 @@ conv_handler = ConversationHandler(
         },
         fallbacks=[CommandHandler('submissions', select_year)],
     )
+
 fileRequest_handler = ConversationHandler(
         entry_points=[CommandHandler('academic_documents', getAcademicFiles)],
         states={
             YEAR: [CommandHandler('userinfo', select_yearinfo)],
             DEPARTMENT: [CallbackQueryHandler(select_department)],
             SEMESTER: [CallbackQueryHandler(select_semesterinfo)],
-            CHOOSE_FILE: [CallbackQueryHandler(select_semesterinfo)],
+            CHOOSE_FILE: [CallbackQueryHandler(selectFile)],
             SETDID: [CallbackQueryHandler(file_was_selected)],
-            # SENDFILE: (MessageHandler(file_sender))
+            # SENDFILE: [CallbackQueryHandler(file_sender)]
         },
         fallbacks=[CommandHandler('academic_documents', getAcademicFiles)],
     )

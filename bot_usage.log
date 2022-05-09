@@ -1,9 +1,0 @@
-2022-05-09 16:07:18,530 - apscheduler.scheduler - INFO - Scheduler started
-2022-05-09 16:08:00,487 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
-2022-05-09 16:08:00,645 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
-2022-05-09 16:08:05,897 - root - INFO - tushar_493 uploaded 1550146177phpa32UHt.pdf
-2022-05-09 16:08:28,481 - apscheduler.scheduler - INFO - Scheduler started
-2022-05-09 16:23:18,947 - apscheduler.scheduler - INFO - Scheduler started
-2022-05-09 16:28:52,275 - apscheduler.scheduler - INFO - Scheduler started
-2022-05-09 16:31:24,300 - apscheduler.scheduler - INFO - Scheduler started
-2022-05-09 16:44:14,231 - apscheduler.scheduler - INFO - Scheduler started
