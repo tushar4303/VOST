@@ -12,6 +12,7 @@ import logging
 import pyfiglet
 import config
 import requests
+from functools import wraps
 from bot_responses import * 
 from telegram.ext import (
     Updater,
@@ -25,8 +26,21 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 
 PORT = int(os.environ.get('PORT', '8443'))
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
+logging.basicConfig(filename='bot_usage.log', encoding='utf-8', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+ALLOWED_USERS = ['tushar_493']
+STUDENTS = ['tushar_493']
+
+def restricted(func):
+    @wraps(func)
+    def wrapped(update, context, *args, **kwargs):
+        user_name = update.effective_user.username
+        if user_name not in STUDENTS:
+            update.message.reply_text(f"Unauthorized access denied for {user_name}.")
+            return
+        return func(update, context, *args, **kwargs)
+    return wrapped
 
 def getCreds():
   # The file token.pickle stores the user's access and refresh tokens, and is
@@ -57,7 +71,7 @@ file_ids
 doc_ids
 
 def start(update: Update, context: CallbackContext) -> None:
-    """Inform user about what this bot can do"""
+    pass 
     update.message.reply_text('''Welcome to VOST! 
 This bot helps in users to submit their assignments and also know more about DBIT.
 
@@ -82,6 +96,7 @@ def collegeBrochure(update, context):
 def error(bot, update, error):
   logger.warning('Update "%s" caused error "%s"', update, error)
     
+@restricted
 def select_year(update, context) -> int:
     buttons = []
     for year in file_ids.keys():
@@ -92,9 +107,6 @@ def select_year(update, context) -> int:
     return DEPARTMENT
 
 def select_yearinfo(update, context) -> int:
-    query = update.callback_query
-    query.answer()
-    choice = query.data
     buttons = []
     for year in file_ids.keys():
         buttons.append([InlineKeyboardButton(year, callback_data=year)])
@@ -170,6 +182,17 @@ def file_was_selected(update, context):
     query.edit_message_text("Your file is on the way", reply_markup=None)
     return SENDFILE
 
+def file_sender(update, context):
+    path = context.user_data["doc_ids"]
+    context.bot.sendDocument(update.effective_chat.id, document=open(path, 'rb'))
+
+
+
+def getAcademicFiles(update, context) -> None:
+    update.message.reply_text('''Select your year, branch and semester to get the files accordingly
+    tap /userinfo to start''')
+    return YEAR
+    
 def subject_was_selected(update, context):
     #save file_id in the context
     query = update.callback_query
@@ -195,7 +218,7 @@ def file_uploader(update, context):
   media = MediaFileUpload(filename, chunksize=1024 * 1024, mimetype=doc.mime_type,  resumable=True)
   request = service.files().create(body=metadata,
                                 media_body=media)
-
+  user_name = update.effective_user.username
   response = None
   while response is None:
     status, response = request.next_chunk()
@@ -203,6 +226,8 @@ def file_uploader(update, context):
        print( "Uploaded %d%%." % int(status.progress() * 100))
 
   context.bot.send_message(chat_id=update.effective_chat.id, text="✅ File uploaded!")
+  logging.info('%s uploaded %s', str(user_name), str(filename))
+
   os.remove(filename)
   return ConversationHandler.END
 
@@ -220,22 +245,19 @@ conv_handler = ConversationHandler(
 fileRequest_handler = ConversationHandler(
         entry_points=[CommandHandler('academic_documents', getAcademicFiles)],
         states={
+            YEAR: [CommandHandler('userinfo', select_yearinfo)],
             DEPARTMENT: [CallbackQueryHandler(select_department)],
-            SEMESTER: [CallbackQueryHandler(select_semester)],
-            SUBJECT: [CallbackQueryHandler(select_subject)],
-            SETFID: [CallbackQueryHandler(subject_was_selected)],
-            WAIT_STATE: [MessageHandler(Filters.document,file_uploader)]
+            SEMESTER: [CallbackQueryHandler(select_semesterinfo)],
+            CHOOSE_FILE: [CallbackQueryHandler(select_semesterinfo)],
+            SETDID: [CallbackQueryHandler(file_was_selected)],
+            # SENDFILE: (MessageHandler(file_sender))
         },
-        fallbacks=[CommandHandler('submissions', select_year)],
+        fallbacks=[CommandHandler('academic_documents', getAcademicFiles)],
     )
 
 def poc_handler(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(poc_reponse)
-
-def getAcademicFiles(update, context) -> None:
-    update.message.reply_text("Select your year, branch and semester to get the files accordingly", reply_markup=reply_markup)
-    return YEAR
 
 def getCollegeInfo(update, context) -> None:
     """Display a help message"""
@@ -276,7 +298,6 @@ def ishrae(update, context) -> None:
 def acm(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(acmResponse)
-
 
 def main():
   updater = Updater(token=config.TOKEN,use_context=True)

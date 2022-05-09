@@ -10,7 +10,8 @@ Janhavi Baikerikar -     wa.me/+919833348725
 
 academic_docs_response = '''/Academic_calendar
 /Timetable
-/Hallticket and seatNO
+/Hallticket 
+/seatNO
 
 '''
 

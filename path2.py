@@ -2,59 +2,66 @@ doc_ids = {
   "First year": {
         "IT":{
             "Semester I": {
-                "Syllabus": "https://bit.ly/3KOTIxL",
-                "Timetable": "https://bit.ly/3KOTIxL",
+                "Hallticket": "pdfFiles/ExamTimetable/SE/SE_IT_Sem4_C-Scheme.pdf",
+                "calendar": "pdfFiles/ExamTimetable/SE/SE_IT_Sem4_C-Scheme.pdf",
+                "timetable": "pdfFiles/ExamTimetable/SE/SE_IT_Sem4_C-Scheme.pdf",
+                "seatNo": "pdfFiles/ExamTimetable/SE/SE_IT_Sem4_C-Scheme.pdf"
             },
             "Semester II": {
-                "Physics II": "",
-                "Chemistry II": "",
-                "Maths II": "",
+                "Hallticket": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
+                "calendar": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
+                "timetable": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
+                "seatNo": ""
             }
         }
     },
   "Second year": {
         "IT":{
       "Semester III": {
-          "DSA": "",
-          "PCPF": "",
-          "DBMS": "",
+                "Hallticket": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
+                "calendar": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
+                "timetable": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
+                "seatNo": ""
       },
       "Semester IV": {
-          "Computer Networks": "",
-          "Python Lab": "",
-          "Microprocessor Lab": "",
+                "Hallticket": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
+                "calendar": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
+                "timetable": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
+                "seatNo": ""
             }
        }
     },
   "Third year": {
       "IT":{
       "Semester V": {
-          "Internet Programming": "",
-          "Software Engineering": "",
-          "DevOPs Lab": "",
+                "Hallticket": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
+                "calendar": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
+                "timetable": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
+                "seatNo": ""
       },
       "Semester VI": {
-          "AI and DS": "",
-          "Web X.0": "",
-          "Ethical Hacking": "",
+                "Hallticket": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
+                "calendar": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
+                "timetable": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
+                "seatNo": ""
           }
       }
   },
   "Fourth year": {
       "IT":{
       "Semester VII": {
-          "Mobile App Development": "",
-          "Artificial Intelligence": "",
-          "Softcomputing": "",
+                "Hallticket": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
+                "calendar": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
+                "timetable": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
+                "seatNo": ""
       },
       "Semester VIII": {
-          "Big Data Analysis": "",
-          "Internet of Everything": "",
-          "UI Design": "",
+                "Hallticket": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
+                "calendar": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
+                "timetable": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
+                "seatNo": ""
          }
       }
   }
 }
-
-
 
