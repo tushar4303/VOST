@@ -29,8 +29,8 @@ PORT = int(os.environ.get('PORT', '8443'))
 logging.basicConfig(filename='bot_usage.log', filemode='w', encoding='utf-8', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-ALLOWED_USERS = ['tushar_493', 'saanvi_naik']
-STUDENTS = ['tushar_493', 'saanvi_naik']
+ALLOWED_USERS = ['saanvi_naik']
+STUDENTS = ['saanvi_naik']
 
 def restricted(func):
     @wraps(func)
@@ -38,6 +38,19 @@ def restricted(func):
         user_name = update.effective_user.username
         if user_name not in STUDENTS:
             update.message.reply_text(f"Unauthorized access denied for {user_name}.")
+
+            return
+        return func(update, context, *args, **kwargs)
+    return wrapped
+
+def restricted_User(func):
+    @wraps(func)
+    def wrapped(update, context, *args, **kwargs):
+        user_name = update.effective_user.username
+        if user_name not in ALLOWED_USERS:
+            update.message.reply_text(f"Unauthorized access denied for {user_name}.")
+            logging.info('Unauthorized access denied for %s on accessing %s.', str(user_name), func)
+
             return
         return func(update, context, *args, **kwargs)
     return wrapped
@@ -286,22 +299,27 @@ fileRequest_handler = ConversationHandler(
         fallbacks=[CommandHandler('academic_documents', getAcademicFiles)],
     )
 
+@restricted_User
 def poc_handler(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(poc_response)
 
+@restricted_User
 def CompsPoc(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(CompsPoc_response)
 
+@restricted_User
 def ItPoc(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(ItPoc_reponse)
 
+@restricted_User
 def ExtcPoc(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(ExtcPoc_response)
 
+@restricted_User
 def MechPoc(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(MechPoc_response)
