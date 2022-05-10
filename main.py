@@ -26,7 +26,7 @@ from telegram import ChatAction, InlineKeyboardButton, InlineKeyboardMarkup, Upd
 
 PORT = int(os.environ.get('PORT', '8443'))
 
-logging.basicConfig(filename='bot_usage.log', encoding='utf-8', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
+logging.basicConfig(filename='bot_usage.log', filemode='w', encoding='utf-8', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 ALLOWED_USERS = ['tushar_493', 'saanvi_naik']
@@ -102,11 +102,25 @@ Click /help to know more about the bot.
 '''
 )
 
+# @send_upload_file_action
+# def collegeBrochure(update, context):
+    
+#     context.bot.sendDocument(update.effective_chat.id, document=open('pdfFiles/brochure.pdf', 'rb'), filename="brochure.pdf")
+#     os.remove('brochure.pdf')
+
 @send_upload_file_action
 def collegeBrochure(update, context):
-    
+
     context.bot.sendDocument(update.effective_chat.id, document=open('pdfFiles/brochure.pdf', 'rb'), filename="brochure.pdf")
     os.remove('brochure.pdf')
+    
+    # # fetch from Google Drive
+    # url = 'https://github.com/tushar4303/VOST/blob/main/pdfFiles/ExamTimetable/SE/SE_IT_Sem4_C-Scheme.pdf'
+    # r = requests.get(url, allow_redirects=True)
+    # # save local copy
+    # open('file.pdf', 'wb').write(r.content)# send file to user
+    # context.bot.sendDocument(update.effective_chat.id, document=open('file.pdf', 'rb'), filename="timetable.pdf")
+    # os.remove('timetable.pdf')
 
 def error(bot, update, error):
   logger.warning('Update "%s" caused error "%s"', update, error)
@@ -217,7 +231,7 @@ def subject_was_selected(update, context):
     query.edit_message_text("Now send your file", reply_markup=None)
     return WAIT_STATE
 
-send_typing_action
+@send_typing_action
 def file_uploader(update, context):
   """handles the uploaded files"""
   file = context.bot.getFile(update.message.document.file_id)
@@ -274,7 +288,7 @@ fileRequest_handler = ConversationHandler(
 
 def poc_handler(update, context) -> None:
     """Display a help message"""
-    update.message.reply_text(poc_reponse)
+    update.message.reply_text(poc_response)
 
 def getCollegeInfo(update, context) -> None:
     """Display a help message"""
@@ -316,6 +330,34 @@ def acm(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(acmResponse)
 
+def lisoc(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(litsocResponse)
+
+def sie(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(sieResponse)
+
+def ecell(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(ecellResponse)
+
+def musicClub(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(musicClubResponse)
+
+def dramaClub(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(dramaClubResponse)
+
+def danceClub(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(danceClubResponse)
+
+def marathiClub(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(marathiClubResponse)
+
 def main():
   updater = Updater(token=config.TOKEN,use_context=True)
   dispatcher = updater.dispatcher
@@ -332,6 +374,14 @@ def main():
   updater.dispatcher.add_handler(CommandHandler('madgears', madgears))
   updater.dispatcher.add_handler(CommandHandler('ishrae', ishrae))
   updater.dispatcher.add_handler(CommandHandler('acm', acm))
+  updater.dispatcher.add_handler(CommandHandler('Student_clubs', studentClubs))
+  updater.dispatcher.add_handler(CommandHandler('LITSOC', lisoc))
+  updater.dispatcher.add_handler(CommandHandler('SIE', sie))
+  updater.dispatcher.add_handler(CommandHandler('ECELL', ecell))
+  updater.dispatcher.add_handler(CommandHandler('Music_Club', musicClub))
+  updater.dispatcher.add_handler(CommandHandler('Dance_Club', danceClub))
+  updater.dispatcher.add_handler(CommandHandler('Drama_Club', dramaClub))
+  updater.dispatcher.add_handler(CommandHandler('Marathi_Club', marathiClub))
   updater.dispatcher.add_handler(CommandHandler('academic_documents', getAcademicFiles))
 
   # updater.start_webhook(listen="0.0.0.0",

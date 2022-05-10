@@ -1,4 +1,43 @@
-poc_reponse = '''These are the contact information for IT department:
+poc_response = '''
+Please select one of the department to get its contact information 
+/IT for Information technology
+/COMPS for Computer Engineering
+/MECH for Mechanical
+/EXTC for Electronics and Telecommunication
+'''
+
+ItPoc_reponse = '''These are the contact information for IT department:
+Teaching Staff:
+Shiv Negi -              wa.me/+919819002150
+Tayyabali Sayyed -       wa.me/+918605134503
+Nilesh Ghavate -         wa.me/+919594813901
+Prasad Padalkar -        wa.me/+919967555817
+
+Dept HOD:
+Janhavi Baikerikar -     wa.me/+919833348725
+'''
+CompsPoc_response = '''These are the contact information for IT department:
+Teaching Staff:
+Shiv Negi -              wa.me/+919819002150
+Tayyabali Sayyed -       wa.me/+918605134503
+Nilesh Ghavate -         wa.me/+919594813901
+Prasad Padalkar -        wa.me/+919967555817
+Dept HOD:
+Janhavi Baikerikar -     wa.me/+919833348725
+'''
+
+MechPoc_response = '''These are the contact information for MECH department:
+Teaching Staff:
+Dr Shashikant S. Pawar  -  wa.me/+919108311319
+Sandip Sabnis  -   wa.me/+919819611812 
+Nilesh Gaware  -  wa.me/+919757113321 
+Cleta A Pereira  - wa.me/+919892648169
+
+Dept HOD:
+Dr Pradeepkumar Suryawanshi - wa.me/+919076003191
+'''
+
+ExtcPoc_response = '''These are the contact information for IT department:
 Teaching Staff:
 Shiv Negi -              wa.me/+919819002150
 Tayyabali Sayyed -       wa.me/+918605134503
@@ -32,14 +71,75 @@ CollegeInfoResponse = '''
 /Technical_fest to know about technical events hosted at DBIT
 /Cultural_fest for cultural events
 '''
+###
+studentClubsResponse = '''The student clubs of DBIT stand as pillars supporting the beam that balances education and worldly skills. 
+Ranging from the melodious patterns of the music club to the impactful verbal prowess of the literary club. 
+The college shelters platforms for each type of skill to bloom and flourish through the means of the student clubs.
 
-studentClubsResponse = '''
-/Student_clubs to know more about active student clubs in DBIT
-/Student_chapters for student chapters
-/Technical_fest to know about technical events hosted at DBIT
-/Cultural_fest for cultural events
+/LITSOC - The literary Society of DBIT
+/SIE - The environment club of DBIT
+/ECELL - The Entrepreneurship cell of DBIT
+/Dance_Club - Dance Club of DBIT
+/Music_Club - Music Club of DBIT
+/Drama_Club - Drama Club of DBIT
+/Marathi_Club - Marathi Club of DBIT
 '''
 
+litsocResponse = '''LitSoc is the literary society of DBIT.
+
+Organizing elocutions, recitations, essay writing competitions and providing the platform to get self authored articles published, 
+the club harbours language enthusiasts and polishes their skills to an incomparable extent. 
+Sharpening and shaping interpersonal skills with the intention to prepare students for the corporate world, the club ensures undaunted prosperity and success.
+
+Insta handle:
+https://instagram.com/dbit_litsoc
+'''
+
+sieResponse = '''SIE (Social Innovation For Environment) is the environment club of DBIT.
+
+The main objective of this club is to make our campus green and to promote use of up-cycled products.
+To create awareness of carbon neutrality through activities, workshops and competitions and to train everyone to make the campus C neutral.
+
+Insta handle:
+https://instagram.com/sie_club_dbit
+'''
+
+ecellResponse = '''ECELL is the entrepreneurship cell of DBIT.
+
+Insta handle:
+https://instagram.com/dbit_ecell
+'''
+
+danceClubResponse = '''Highlighting the importance that dancing plays in our lives, the Dance Club of the institution 
+provides a healthy platform to the students on which they learn to express themselves freely while controlling their emotions. 
+The club remains among the elite ones and is a true teacher of having conversations between the body and the soul.
+
+Insta handle:
+https://instagram.com/danceclubofdbit
+'''
+
+musicClubResponse = '''Stimulating the mind, increasing attention, bettering mental states and inducing relaxations 
+coupled with extreme levels of sweet melody, The well known Music Club of DBIT gives platform to budding singers.
+
+Insta handle:
+https://instagram.com/musicclubdbit'''
+
+dramaClubResponse = '''With the relentless pursuit to achieve academic excellence, the requirement for entertainment 
+is often alienated and hence, lives begin to take monotonous turns. 
+With the aim to demonstrate this dreadful consequence, DBIT's Drama club ensures that there's always 
+presence of rejuvenating and mind enhancing entertainment in the form of Drama in student lives.
+
+Insta handle:
+https://instagram.com/dramaclub_dbit
+'''
+
+marathiClubResponse = '''जगाचा प्रवास करा आणि तुमच्या अंतःप्रेरणा तुम्हाला तुमच्या घरी परत खेचतील Agreeing with the universally true statement above, 
+DBIT's Marathi club ensures that the essence of our home state is preserved and protected throughout 
+the years through the means of Marathi writings, singing and drama.
+
+Insta handle:
+https://instagram.com/dbitmarathiclub
+'''
 studentChaptersResponse = '''DBIT's technical chapters and clubs aims to provide one-of-a-kind chances for networking, mentorship, and connecting through shared interests.
 These student chapters act as a springboard to forums, panel debates, and symposia that further a student's professional growth.
 
@@ -164,8 +264,8 @@ N/A
 technicalEventsResponse = '''
 /Student_clubs to know more about active student clubs in DBIT
 /Student_chapters for student chapters
-/Technical_fest to know about technical events hosted at DBIT
-/Cultural_fest for cultural events
+/Technical_events to know about technical events hosted at DBIT
+/Cultural_events for cultural events
 '''
 
 grade_response = '''Please select one from the following:
@@ -175,48 +275,3 @@ grade_response = '''Please select one from the following:
 /BE - for Final year
 '''
 
-# def subject_was_selected(update, context):
-#     #save file_id in the context
-#     context.user_data["folder_id"] = update.callback_query.data
-#     update.message.edit_text("Now send your file", reply_markup=None)
-
-# def file_uploader(update, context):
-#   """handles the uploaded files"""
-#   query = update.callback_query
-#   query.answer()
-
-#   file = context.bot.getFile(update.message.document.file_id)
-#   file.download(update.message.document.file_name)
-
-#   doc = update.message.document
-
-#   service = build('drive', 'v3', credentials=getCreds(),cache_discovery=False)
-#   filename = doc.file_name
-  
-#   metadata = {'name': filename,
-#               'parents': [context.user_data]
-#   }
-#   media = MediaFileUpload(filename, chunksize=1024 * 1024, mimetype=doc.mime_type,  resumable=True)
-#   request = service.files().create(body=metadata,
-#                                 media_body=media)
-
-#   response = None
-#   while response is None:
-#     status, response = request.next_chunk()
-#     if status:
-#        print( "Uploaded %d%%." % int(status.progress() * 100))
-
-#   context.bot.send_message(chat_id=update.effective_chat.id, text="✅ File uploaded!")
-#   os.remove(filename)
-#   return ConversationHandler.END
-
-# conv_handler = ConversationHandler(
-#         entry_points=[CommandHandler('submissions', select_year)],
-#         states={
-#             DEPARTMENT: [CallbackQueryHandler(select_department)],
-#             SEMESTER: [CallbackQueryHandler(select_semester)],
-#             SUBJECT: [CallbackQueryHandler(select_subject)],
-#             WAIT_STATE: [MessageHandler(Filters.document,file_uploader)]
-#         },
-#         fallbacks=[CommandHandler('submissions', select_year)],
-#     )
