@@ -290,6 +290,22 @@ def poc_handler(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(poc_response)
 
+def CompsPoc(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(CompsPoc_response)
+
+def ItPoc(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(ItPoc_reponse)
+
+def ExtcPoc(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(ExtcPoc_response)
+
+def MechPoc(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(MechPoc_response)
+
 def getCollegeInfo(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(CollegeInfoResponse)
@@ -366,6 +382,10 @@ def main():
   dispatcher.add_handler(fileRequest_handler)
   dispatcher.add_handler(CommandHandler('getmeBrochure', collegeBrochure))
   updater.dispatcher.add_handler(CommandHandler('poc', poc_handler))
+  updater.dispatcher.add_handler(CommandHandler('COMPS', CompsPoc))
+  updater.dispatcher.add_handler(CommandHandler('IT', ItPoc))
+  updater.dispatcher.add_handler(CommandHandler('EXTC', ExtcPoc))
+  updater.dispatcher.add_handler(CommandHandler('MECH', MechPoc))
   updater.dispatcher.add_handler(CommandHandler('College_information', getCollegeInfo))
   updater.dispatcher.add_handler(CommandHandler('Student_chapters', studentChapters))
   updater.dispatcher.add_handler(CommandHandler('csi', csi))

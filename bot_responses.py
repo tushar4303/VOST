@@ -6,45 +6,59 @@ Please select one of the department to get its contact information
 /EXTC for Electronics and Telecommunication
 '''
 
-ItPoc_reponse = '''These are the contact information for IT department:
+ItPoc_reponse = '''Tap on /poc to see the menu again
+These are the contact information for IT department:
+
 Teaching Staff:
-Shiv Negi -              wa.me/+919819002150
-Tayyabali Sayyed -       wa.me/+918605134503
-Nilesh Ghavate -         wa.me/+919594813901
-Prasad Padalkar -        wa.me/+919967555817
+Shiv Negi - wa.me/+919819002150
+Tayyabali Sayyed - wa.me/+918605134503
+Nilesh Ghavate - wa.me/+919594813901
+Prasad Padalkar - wa.me/+919967555817
+Aruna Khubalkar - wa.me/+919819582340
 
 Dept HOD:
-Janhavi Baikerikar -     wa.me/+919833348725
+Janhavi Baikerikar - wa.me/+919833348725
 '''
-CompsPoc_response = '''These are the contact information for IT department:
+CompsPoc_response = '''Tap on /poc to see the menu again
+These are the contact information for Comps department:
+
 Teaching Staff:
-Shiv Negi -              wa.me/+919819002150
-Tayyabali Sayyed -       wa.me/+918605134503
-Nilesh Ghavate -         wa.me/+919594813901
-Prasad Padalkar -        wa.me/+919967555817
+Imran Ali Mirza - wa.me/+919987611000
+Amiya Tripati - wa.me/+919833029544
+Sana Shaikh - wa.me/+919594198786
+Sejal Chopra - wa.me/+919892524834
+Priya Kaul-   wa.me/+919769805588
+Dipti Jadhav - wa.me/+919223370153
+Kalpita Wagaskar - wa.me/+919004479765
+
 Dept HOD:
-Janhavi Baikerikar -     wa.me/+919833348725
+Phiroj Shaikh - wa.me/+919975321741
 '''
 
-MechPoc_response = '''These are the contact information for MECH department:
+MechPoc_response = '''Tap on /poc to see the menu again
+These are the contact information for MECH department:
+
 Teaching Staff:
-Dr Shashikant S. Pawar  -  wa.me/+919108311319
-Sandip Sabnis  -   wa.me/+919819611812 
-Nilesh Gaware  -  wa.me/+919757113321 
+Dr Shashikant Pawar  -  wa.me/+919108311319
+Sandip Sabnis  - wa.me/+919819611812 
+Nilesh Gaware  - wa.me/+919757113321 
 Cleta A Pereira  - wa.me/+919892648169
 
 Dept HOD:
 Dr Pradeepkumar Suryawanshi - wa.me/+919076003191
 '''
 
-ExtcPoc_response = '''These are the contact information for IT department:
+ExtcPoc_response = '''Tap on /poc to see the menu again
+These are the contact information for EXTC department:
+
 Teaching Staff:
-Shiv Negi -              wa.me/+919819002150
-Tayyabali Sayyed -       wa.me/+918605134503
-Nilesh Ghavate -         wa.me/+919594813901
-Prasad Padalkar -        wa.me/+919967555817
+Mr. Jithin Isaac - wa.me/+919920285861
+Dr. Sudhakar Mande  - wa.me/+919867285270
+Ms. Namita Agarwal  - wa.me/+919969688477 
+Ms. Pratibha Dumane  - wa.me/+919820383934
+
 Dept HOD:
-Janhavi Baikerikar -     wa.me/+919833348725
+Dr. Ashwini Kotrashetti - wa.me/+919820601474
 '''
 
 academic_docs_response = '''/Academic_calendar
