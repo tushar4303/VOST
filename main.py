@@ -24,7 +24,7 @@ from telegram.ext import (
 )
 from telegram import ChatAction, InlineKeyboardButton, InlineKeyboardMarkup, Update
 
-# PORT = int(os.environ.get('PORT', '8443'))
+PORT = int(os.environ.get('PORT', '8443'))
 
 logging.basicConfig(filename='bot_usage.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -229,6 +229,7 @@ def select_subject(update, context) -> int:
     query.edit_message_text(text="Choose a Subject:", reply_markup=reply_markup)
     return SETFID
 
+@send_upload_file_action
 def file_was_selected(update, context):
     #save file_id in the context
     query = update.callback_query
@@ -237,14 +238,8 @@ def file_was_selected(update, context):
     print(path)
     
     query.edit_message_text("Your file is on the way", reply_markup=None)
-    context.bot.sendDocument(update.effective_chat.id, document=open(f"{path}"))
-    print(34)
-    # return SENDFILE
-
-def file_sender(update, context):
-    print(str(context.user_data["doc_ids"]))
-    # context.bot.sendDocument(update.effective_chat.id, document=open([context.user_data["doc_ids"]], 'rb'))
-    print(34)
+    context.bot.sendDocument(update.effective_chat.id, document=open(f"{path}", 'rb'))
+    ConversationHandler.END
 
 def getAcademicFiles(update, context) -> None:
     update.message.reply_text('''Select your year, branch and semester to get the files accordingly
@@ -309,7 +304,6 @@ fileRequest_handler = ConversationHandler(
             SEMESTER: [CallbackQueryHandler(select_semesterinfo)],
             CHOOSE_FILE: [CallbackQueryHandler(selectFile)],
             SETDID: [CallbackQueryHandler(file_was_selected)],
-            # SENDFILE: [CallbackQueryHandler(file_sender)]
         },
         fallbacks=[CommandHandler('academic_documents', getAcademicFiles)]    )
 
