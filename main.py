@@ -212,7 +212,8 @@ def selectFile(update, context) -> int:
     print(semester)
     for file in doc_ids[year][department][semester].keys():
         buttons.append([InlineKeyboardButton(file, callback_data=doc_ids[year][department][semester][file])])
-
+        print(doc_ids[year][department][semester][file])
+    print("reached here")
     reply_markup = InlineKeyboardMarkup(buttons)
     query.edit_message_text(text="Choose a file:", reply_markup=reply_markup)
     return SETDID
