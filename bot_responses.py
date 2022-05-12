@@ -6,6 +6,18 @@ Please select one of the department to get its contact information
 /EXTC for Electronics and Telecommunication
 '''
 
+helpResponse = '''To use the VOST Telegram Bot, 
+use the '/' prefix followed by the respective command name or tap on the displayed command directly. 
+Users can click on the buttons displayed under the respective command to go about their process
+
+Use the command /poc for information regarding teaching faculty of DBIT. 
+
+For any queries or suggestions, contact us at vost.customersupport@dbit.in
+'''
+
+vostResponse = '''
+'''
+
 ItPoc_reponse = '''Tap on /poc to see the menu again
 These are the contact information for IT department:
 
@@ -32,7 +44,7 @@ Dipti Jadhav - wa.me/+919223370153
 Kalpita Wagaskar - wa.me/+919004479765
 
 Dept HOD:
-Phiroj Shaikh - wa.me/+919975321741
+Phiroz Shaikh - wa.me/+919975321741
 '''
 
 MechPoc_response = '''Tap on /poc to see the menu again
@@ -84,6 +96,7 @@ CollegeInfoResponse = '''
 /Student_chapters for student chapters
 /Technical_fest to know about technical events hosted at DBIT
 /Cultural_fest for cultural events
+/getmeBrochure to get the college brochure
 '''
 ###
 studentClubsResponse = '''The student clubs of DBIT stand as pillars supporting the beam that balances education and worldly skills. 

@@ -24,13 +24,13 @@ from telegram.ext import (
 )
 from telegram import ChatAction, InlineKeyboardButton, InlineKeyboardMarkup, Update
 
-PORT = int(os.environ.get('PORT', '8443'))
+# PORT = int(os.environ.get('PORT', '8443'))
 
-logging.basicConfig(filename='bot_usage.log', filemode='w', encoding='utf-8', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
+logging.basicConfig(filename='bot_usage.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-ALLOWED_USERS = ['saanvi_naik']
-STUDENTS = ['saanvi_naik']
+ALLOWED_USERS = ['saanvi_naik', 'tushar_493', 'vendra_0408', 'jannuom']
+STUDENTS = ['saanvi_naik', 'tushar_493', 'vendra_0408', 'jannuom']
 
 def restricted(func):
     @wraps(func)
@@ -97,7 +97,7 @@ def getCreds():
 
   return creds
 
-DEPARTMENT, SEMESTER, SUBJECT, WAIT_STATE, SETFID, YEAR, CHOOSE_FILE, SETDID, SENDFILE = range(9)
+DEPARTMENT, SEMESTER, SUBJECT, WAIT_STATE, SETFID, YEAR, CHOOSE_FILE, SETDID, SENDFILE, DEPARTMENTINFO = range(10)
 file_ids
 doc_ids
 
@@ -123,16 +123,15 @@ Click /help to know more about the bot.
 
 @send_upload_file_action
 def collegeBrochure(update, context):
-
+    # print(75)
     context.bot.sendDocument(update.effective_chat.id, document=open('pdfFiles/brochure.pdf', 'rb'), filename="brochure.pdf")
-    os.remove('brochure.pdf')
-    
+    print(23)
     # # fetch from Google Drive
-    # url = 'https://github.com/tushar4303/VOST/blob/main/pdfFiles/ExamTimetable/SE/SE_IT_Sem4_C-Scheme.pdf'
+    # url = 'https://github.com/tushar4303/VOST/raw/main/pdfFiles/ExamTimetable/SE/SE_IT_Sem4_C-Scheme.pdf'
     # r = requests.get(url, allow_redirects=True)
     # # save local copy
-    # open('file.pdf', 'wb').write(r.content)# send file to user
-    # context.bot.sendDocument(update.effective_chat.id, document=open('file.pdf', 'rb'), filename="timetable.pdf")
+    # open('timetable.pdf', 'wb').write(r.content)# send file to user
+    # context.bot.send_document(update.effective_chat.id, document=open('timetable.pdf', 'rb'), filename="SE_IT_Sem4_C-Scheme.pdf")
     # os.remove('timetable.pdf')
 
 def error(bot, update, error):
@@ -155,7 +154,7 @@ def select_yearinfo(update, context) -> int:
 
     reply_markup = InlineKeyboardMarkup(buttons)  
     update.message.reply_text("Select the year in which you are studying:", reply_markup=reply_markup)
-    return DEPARTMENT
+    return DEPARTMENTINFO
 
 def select_department(update, context) -> int:
     query = update.callback_query
@@ -163,6 +162,18 @@ def select_department(update, context) -> int:
     year = query.data
     buttons = []
     for department in file_ids[year].keys():
+        buttons.append([InlineKeyboardButton(department, callback_data=f'{year}|{department}')])
+
+    reply_markup = InlineKeyboardMarkup(buttons)
+    query.edit_message_text(text="Choose your Department:", reply_markup=reply_markup)
+    return SEMESTER
+
+def select_departmentinfo(update, context) -> int:
+    query = update.callback_query
+    query.answer()
+    year = query.data
+    buttons = []
+    for department in doc_ids[year].keys():
         buttons.append([InlineKeyboardButton(department, callback_data=f'{year}|{department}')])
 
     reply_markup = InlineKeyboardMarkup(buttons)
@@ -198,8 +209,10 @@ def selectFile(update, context) -> int:
     query.answer()
     year, department, semester = update.callback_query.data.split("|")
     buttons = []
+    print(semester)
     for file in doc_ids[year][department][semester].keys():
         buttons.append([InlineKeyboardButton(file, callback_data=doc_ids[year][department][semester][file])])
+
     reply_markup = InlineKeyboardMarkup(buttons)
     query.edit_message_text(text="Choose a file:", reply_markup=reply_markup)
     return SETDID
@@ -220,16 +233,18 @@ def file_was_selected(update, context):
     #save file_id in the context
     query = update.callback_query
     query.answer()
-    context.user_data["doc_ids"] = str(update.callback_query.data)
+    path = str(update.callback_query.data)
+    print(path)
     
     query.edit_message_text("Your file is on the way", reply_markup=None)
-    # context.bot.sendDocument(update.effective_chat.id, document=open("{context.user_data["doc_ids"]}"))
-    print
+    context.bot.sendDocument(update.effective_chat.id, document=open(f"{path}"))
+    print(34)
     # return SENDFILE
 
 def file_sender(update, context):
     print(str(context.user_data["doc_ids"]))
     # context.bot.sendDocument(update.effective_chat.id, document=open([context.user_data["doc_ids"]], 'rb'))
+    print(34)
 
 def getAcademicFiles(update, context) -> None:
     update.message.reply_text('''Select your year, branch and semester to get the files accordingly
@@ -290,14 +305,13 @@ fileRequest_handler = ConversationHandler(
         entry_points=[CommandHandler('academic_documents', getAcademicFiles)],
         states={
             YEAR: [CommandHandler('userinfo', select_yearinfo)],
-            DEPARTMENT: [CallbackQueryHandler(select_department)],
+            DEPARTMENTINFO: [CallbackQueryHandler(select_departmentinfo)],
             SEMESTER: [CallbackQueryHandler(select_semesterinfo)],
             CHOOSE_FILE: [CallbackQueryHandler(selectFile)],
             SETDID: [CallbackQueryHandler(file_was_selected)],
             # SENDFILE: [CallbackQueryHandler(file_sender)]
         },
-        fallbacks=[CommandHandler('academic_documents', getAcademicFiles)],
-    )
+        fallbacks=[CommandHandler('academic_documents', getAcademicFiles)]    )
 
 @restricted_User
 def poc_handler(update, context) -> None:
@@ -328,6 +342,10 @@ def getCollegeInfo(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(CollegeInfoResponse)
 
+def help(update, context) -> None:
+    """Display a help message"""
+    update.message.reply_text(helpResponse)
+
 def studentClubs(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(studentClubsResponse)
@@ -343,6 +361,12 @@ def technicalEvents(update, context) -> None:
 def csi(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(csiResponse)
+
+@send_upload_file_action
+def csiBrochure(update, context):
+    # print(75)
+    context.bot.send_document(update.effective_chat.id, document=open('pdfFiles/brochure.pdf', 'rb'), filename="CSI_brochure.pdf")
+    print(23)
 
 def ieee(update, context) -> None:
     """Display a help message"""
@@ -392,18 +416,39 @@ def marathiClub(update, context) -> None:
     """Display a help message"""
     update.message.reply_text(marathiClubResponse)
 
+# @restricted_User
+# def unknown(update, context):
+#     user_name = update.effective_user.first_name
+#     context.bot.send_message(chat_id=update.effective_chat.id, text=f"Sorry, {user_name} I couldn't understand that command.")
+
+
+# def unknown(update, context):
+#     user_name = update.effective_user.first_name
+#     if user_name in ALLOWED_USERS:
+#         context.bot.send_message(chat_id=update.effective_chat.id, text=f"Sorry, {user_name} I couldn't understand that command.")
+#     else:
+#         pass
+
+def vost(update, context):
+    update.message.reply_text(vostResponse)
+
+
 def main():
   updater = Updater(token=config.TOKEN,use_context=True)
   dispatcher = updater.dispatcher
   updater.dispatcher.add_handler(CommandHandler('start', start))
+  dispatcher.add_handler(CommandHandler('help', help))
+  dispatcher.add_handler(CommandHandler('vost', vost))
+#   dispatcher.add_handler(MessageHandler(Filters.command, unknown))
   dispatcher.add_handler(conv_handler)
   dispatcher.add_handler(fileRequest_handler)
   dispatcher.add_handler(CommandHandler('getmeBrochure', collegeBrochure))
-  updater.dispatcher.add_handler(CommandHandler('poc', poc_handler))
-  updater.dispatcher.add_handler(CommandHandler('COMPS', CompsPoc))
-  updater.dispatcher.add_handler(CommandHandler('IT', ItPoc))
-  updater.dispatcher.add_handler(CommandHandler('EXTC', ExtcPoc))
-  updater.dispatcher.add_handler(CommandHandler('MECH', MechPoc))
+  dispatcher.add_handler(CommandHandler('csi_brochure', csiBrochure))
+  dispatcher.add_handler(CommandHandler('poc', poc_handler))
+  dispatcher.add_handler(CommandHandler('COMPS', CompsPoc))
+  dispatcher.add_handler(CommandHandler('IT', ItPoc))
+  dispatcher.add_handler(CommandHandler('EXTC', ExtcPoc))
+  dispatcher.add_handler(CommandHandler('MECH', MechPoc))
   updater.dispatcher.add_handler(CommandHandler('College_information', getCollegeInfo))
   updater.dispatcher.add_handler(CommandHandler('Student_chapters', studentChapters))
   updater.dispatcher.add_handler(CommandHandler('csi', csi))
@@ -416,11 +461,11 @@ def main():
   updater.dispatcher.add_handler(CommandHandler('LITSOC', lisoc))
   updater.dispatcher.add_handler(CommandHandler('SIE', sie))
   updater.dispatcher.add_handler(CommandHandler('ECELL', ecell))
-  updater.dispatcher.add_handler(CommandHandler('Music_Club', musicClub))
+  dispatcher.add_handler(CommandHandler('Music_Club', musicClub))
   updater.dispatcher.add_handler(CommandHandler('Dance_Club', danceClub))
   updater.dispatcher.add_handler(CommandHandler('Drama_Club', dramaClub))
   updater.dispatcher.add_handler(CommandHandler('Marathi_Club', marathiClub))
-  updater.dispatcher.add_handler(CommandHandler('academic_documents', getAcademicFiles))
+  dispatcher.add_handler(CommandHandler('academic_documents', getAcademicFiles))
 
   # updater.start_webhook(listen="0.0.0.0",
   #                     port=int(PORT),

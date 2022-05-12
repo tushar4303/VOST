@@ -11,7 +11,6 @@ doc_ids = {
                 "Hallticket": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
                 "calendar": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
                 "timetable": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
-                "seatNo": ""
             }
         }
     },
@@ -21,13 +20,11 @@ doc_ids = {
                 "Hallticket": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
                 "calendar": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
                 "timetable": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
-                "seatNo": ""
       },
       "Semester IV": {
                 "Hallticket": "1Yt1fx5Wy_PeSDB5IDT8wlfAAYpsqCYgA",
                 "calendar": "1-FIyPjML3Dop4HyuIOY2pKDw4de7a5x5",
                 "timetable": "1fNkkPMdCwzwTiI_4oz5UEnLXeJu0Gks7",
-                "seatNo": ""
             }
        }
     },

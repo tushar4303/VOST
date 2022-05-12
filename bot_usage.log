@@ -1,2 +1,39 @@
-2022-05-10 17:33:42,784 - apscheduler.scheduler - INFO - Scheduler started
-2022-05-10 17:33:47,591 - root - INFO - Unauthorized access denied for tushar_493 on accessing <function poc_handler at 0x7f1aea0b4160>.
+2022-05-13 01:11:36,698 - apscheduler.scheduler - INFO - Scheduler started
+2022-05-13 01:12:14,679 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+2022-05-13 01:12:14,854 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
+2022-05-13 01:12:18,890 - root - INFO - vendra_0408 uploaded 7149657_IT_B_FEC102_Engg Physics.pdf
+2022-05-13 01:12:20,221 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+2022-05-13 01:12:20,384 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
+2022-05-13 01:12:22,941 - root - INFO - jannuom uploaded College_brochure.pdf
+2022-05-13 01:12:38,615 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+2022-05-13 01:12:38,804 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
+2022-05-13 01:12:41,515 - root - INFO - jannuom uploaded College_brochure.pdf
+2022-05-13 01:12:59,045 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/home/tushar/.local/lib/python3.10/site-packages/telegram/ext/dispatcher.py", line 555, in process_update
+    handler.handle_update(update, self, check, context)
+  File "/home/tushar/.local/lib/python3.10/site-packages/telegram/ext/conversationhandler.py", line 626, in handle_update
+    new_state = handler.handle_update(update, dispatcher, check_result, context)
+  File "/home/tushar/.local/lib/python3.10/site-packages/telegram/ext/handler.py", line 198, in handle_update
+    return self.callback(update, context)
+  File "/home/tushar/Documents/vost/main.py", line 223, in select_subject
+    year, department, semester = update.callback_query.data.split("|")
+ValueError: not enough values to unpack (expected 3, got 2)
+2022-05-13 01:13:14,046 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+2022-05-13 01:13:14,194 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
+2022-05-13 01:13:16,594 - root - INFO - jannuom uploaded College_brochure.pdf
+2022-05-13 01:13:31,549 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+2022-05-13 01:13:31,721 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
+2022-05-13 01:13:34,020 - root - INFO - jannuom uploaded College_brochure.pdf
+2022-05-13 01:14:06,294 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+2022-05-13 01:14:06,893 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
+2022-05-13 01:14:09,891 - root - INFO - jannuom uploaded College_brochure.pdf
+2022-05-13 01:14:37,709 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+2022-05-13 01:14:37,896 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
+2022-05-13 01:14:40,360 - root - INFO - jannuom uploaded College_brochure.pdf
+2022-05-13 01:15:05,781 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+2022-05-13 01:15:06,022 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
+2022-05-13 01:15:08,375 - root - INFO - jannuom uploaded College_brochure.pdf
+2022-05-13 01:15:10,242 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+2022-05-13 01:15:10,428 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
+2022-05-13 01:15:13,662 - root - INFO - saanvi_naik uploaded IMG_4941.jpg
