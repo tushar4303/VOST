@@ -16,6 +16,11 @@ For any queries or suggestions, contact us at vost.customersupport@dbit.in
 '''
 
 vostResponse = '''
+Hello, I am VOST! A friendly chat bot who is created to help students of DBIT with their submission works along with displaying the college information ranging from hall ticket to the newsletter of DBIT.
+
+I can be also used to get the contact information of the teaching faculty. 
+
+Type /start or click menu to select /start to get started with me.
 '''
 
 ItPoc_reponse = '''Tap on /poc to see the menu again
