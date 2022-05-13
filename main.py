@@ -49,25 +49,12 @@ def getCreds():
   DRIVE_TOKEN_FILE = "token.pickle"
   SCOPES = 'https://www.googleapis.com/auth/drive'
 
-  if os.path.exists(DRIVE_TOKEN_FILE):
-      with open(DRIVE_TOKEN_FILE, 'rb') as f:
-          creds = pickle.load(f)
-          if (
-              (creds is None or not creds.valid)
-              and creds
-              and creds.expired
-              and creds.refresh_token
-          ):
-              creds.refresh(Request())
-  else:
-      flow = InstalledAppFlow.from_client_secrets_file(
-          'credentials.json', SCOPES)
-      creds = flow.run_local_server(port=0, open_browser=False)
-  
-  # Save the credentials for the next run
-  with open(DRIVE_TOKEN_FILE, 'wb') as token:
-      pickle.dump(creds, token)
-
+  if os.path.exists('token.pickle'):
+      with open('token.pickle', 'rb') as token:
+          creds = pickle.load(token)
+  if not creds or not creds.valid:
+    print("Token doesn't exist, generate it using generate_token.py")
+    
   return creds
 
 def restricted(func):
