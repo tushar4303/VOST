@@ -13,10 +13,12 @@ Users can click on the buttons displayed under the respective command to go abou
 Use the command /poc for information regarding teaching faculty of DBIT. 
 
 For any queries or suggestions, contact us at vost.customersupport@dbit.in
+t.me/tushar_493
 '''
 
 vostResponse = '''
-Hello, I am VOST! A friendly chat bot who is created to help students of DBIT with their submission works along with displaying the college information ranging from hall ticket to the newsletter of DBIT.
+Hello, I am VOST! 
+A friendly chat bot who is created to help students of DBIT with their submission works along with displaying the college information ranging from hall ticket to the newsletter of DBIT.
 
 I can be also used to get the contact information of the teaching faculty. 
 

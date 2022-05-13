@@ -1,7 +1,7 @@
 from __future__ import print_function
 import os
 from submissionFolderPath import file_ids
-from submissionFolderPath import doc_ids
+from academicDocsFolderPath import doc_ids
 import pickle
 from googleapiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
@@ -126,7 +126,6 @@ Click /help to know more on how to use the bot.
 @send_upload_file_action
 def collegeBrochure(update, context):
     context.bot.sendDocument(update.effective_chat.id, document=open('pdfFiles/brochure.pdf', 'rb'), filename="brochure.pdf")
-    print(23)
 
 def error(bot, update, error):
   logger.warning('Update "%s" caused error "%s"', update, error)
@@ -182,6 +181,8 @@ def subject_was_selected(update, context):
     #save file_id in the context
     query = update.callback_query
     query.answer()
+    user_name = update.effective_user.username
+  
     context.user_data["file_ids"] = update.callback_query.data
     query.edit_message_text("Now send your file", reply_markup=None)
     return WAIT_STATE
@@ -260,11 +261,8 @@ def selectFile(update, context) -> int:
     query.answer()
     year, department, semester = update.callback_query.data.split("|")
     buttons = []
-    print(semester)
     for file in doc_ids[year][department][semester].keys():
         buttons.append([InlineKeyboardButton(file, callback_data=doc_ids[year][department][semester][file])])
-        print(doc_ids[year][department][semester][file])
-    print("reached here")
     reply_markup = InlineKeyboardMarkup(buttons)
     query.edit_message_text(text="Choose a file:", reply_markup=reply_markup)
     return SETDID
@@ -355,9 +353,7 @@ def csi(update, context) -> None:
 
 @send_upload_file_action
 def csiBrochure(update, context):
-    # print(75)
     context.bot.send_document(update.effective_chat.id, document=open('pdfFiles/brochure.pdf', 'rb'), filename="CSI_brochure.pdf")
-    print(23)
 
 def ieee(update, context) -> None:
     """Display a help message"""

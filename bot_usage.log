@@ -1,26 +1,4 @@
-2022-05-13 14:32:10,220 - apscheduler.scheduler - INFO - Scheduler started
-2022-05-13 14:36:39,675 - telegram.ext.dispatcher - ERROR - No error handlers are registered, logging exception.
-Traceback (most recent call last):
-  File "/opt/virtualenvs/python3/lib/python3.8/site-packages/telegram/ext/dispatcher.py", line 555, in process_update
-    handler.handle_update(update, self, check, context)
-  File "/opt/virtualenvs/python3/lib/python3.8/site-packages/telegram/ext/handler.py", line 198, in handle_update
-    return self.callback(update, context)
-  File "main.py", line 428, in vost
-    update.message.reply_text(vostResponse)
-  File "/opt/virtualenvs/python3/lib/python3.8/site-packages/telegram/message.py", line 791, in reply_text
-    return self.bot.send_message(
-  File "/opt/virtualenvs/python3/lib/python3.8/site-packages/telegram/bot.py", line 130, in decorator
-    result = func(*args, **kwargs)
-  File "/opt/virtualenvs/python3/lib/python3.8/site-packages/telegram/bot.py", line 522, in send_message
-    return self._message(  # type: ignore[return-value]
-  File "/opt/virtualenvs/python3/lib/python3.8/site-packages/telegram/ext/extbot.py", line 200, in _message
-    result = super()._message(
-  File "/opt/virtualenvs/python3/lib/python3.8/site-packages/telegram/bot.py", line 336, in _message
-    result = self._post(endpoint, data, timeout=timeout, api_kwargs=api_kwargs)
-  File "/opt/virtualenvs/python3/lib/python3.8/site-packages/telegram/bot.py", line 295, in _post
-    return self.request.post(
-  File "/opt/virtualenvs/python3/lib/python3.8/site-packages/telegram/utils/request.py", line 361, in post
-    result = self._request_wrapper(
-  File "/opt/virtualenvs/python3/lib/python3.8/site-packages/telegram/utils/request.py", line 279, in _request_wrapper
-    raise BadRequest(message)
-telegram.error.BadRequest: Message must be non-empty
+2022-05-13 15:56:26,532 - apscheduler.scheduler - INFO - Scheduler started
+2022-05-13 15:57:00,784 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+2022-05-13 15:57:00,835 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
+2022-05-13 15:57:02,229 - root - INFO - tushar_493 uploaded 20220513_194710.jpg
