@@ -94,8 +94,6 @@ academic_calendar_response = '''/Branch
 CollegeInfoResponse = '''
 /Student_clubs to know more about active student clubs in DBIT
 /Student_chapters for student chapters
-/Technical_fest to know about technical events hosted at DBIT
-/Cultural_fest for cultural events
 /getmeBrochure to get the college brochure
 '''
 ###

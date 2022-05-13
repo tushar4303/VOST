@@ -30,7 +30,7 @@ logging.basicConfig(filename='bot_usage.log', filemode='w', format='%(asctime)s 
 logger = logging.getLogger(__name__)
 
 ALLOWED_USERS = ['saanvi_naik', 'tushar_493', 'vendra_0408', 'jannuom']
-STUDENTS = ['saanvi_naik', 'tushar_493', 'vendra_0408', 'jannuom']
+STUDENTS = ['saanvi_naik', 'tushar_493', 'vendra_0408']
 
 def restricted(func):
     @wraps(func)

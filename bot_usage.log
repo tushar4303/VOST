@@ -1,1 +1,4 @@
-2022-05-13 04:39:36,178 - apscheduler.scheduler - INFO - Scheduler started
+2022-05-13 04:26:46,976 - apscheduler.scheduler - INFO - Scheduler started
+2022-05-13 04:27:38,292 - googleapiclient.discovery - INFO - URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+2022-05-13 04:27:38,344 - googleapiclient.discovery - INFO - URL being requested: POST https://www.googleapis.com/upload/drive/v3/files?alt=json&uploadType=resumable
+2022-05-13 04:27:40,473 - root - INFO - vendra_0408 uploaded 7149657_IT_B_FEC103_Engg Chemistry 1.pdf
