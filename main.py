@@ -52,8 +52,8 @@ def getCreds():
   if os.path.exists('token.pickle'):
       with open('token.pickle', 'rb') as token:
           creds = pickle.load(token)
-  if not creds or not creds.valid:
-    print("Token doesn't exist, generate it using generate_token.py")
+  else:
+    print("Either tokenpickle is missing or is invalid. Regenerate it using generate_token.py")
     
   return creds
 
