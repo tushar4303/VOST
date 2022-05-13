@@ -33,23 +33,23 @@
 ```
 ## How to Deploy?
 - Intructions will be updated soon
-## Developed by:
 
-👤 **Tushar Padhy**
+## Dependencies
+- oauth2client==4.1.2
+- futures==3.1.1
+- google-api-python-client==1.7.3
+- google-auth==1.25.0
+- google-auth-oauthlib
+- google-auth-httplib2==0.0.3
+- httplib2==0.15.0
+- python-telegram-bot==13.11
+- pyfiglet==0.7
 
-* Github: [@tushar4303](https://github.com/tushar4303)
-
-👤 **Saanvi Naik**
-
-* Github: [@saanvinaik](https://github.com/saanvinaik)
-
-👤 **Vendra Sekar**
-
-* Github: [@PurpleVen](https://github.com/PurpleVen)
-
-👤 **Om Jannu**
-
-* Github: [@Om-jannu](https://github.com/Om-jannu)
+## 👤 Group members:
+- [@tushar4303](https://github.com/tushar4303)
+- [@saanvinaik](https://github.com/saanvinaik)
+- [@PurpleVen](https://github.com/PurpleVen)
+- [@Om-jannu](https://github.com/Om-jannu)
 
 ## Show your support
 
